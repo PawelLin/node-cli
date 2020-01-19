@@ -1,0 +1,42 @@
+const program = require('commander')
+const inquirer = require('inquirer')
+const child_process = require('child_process')
+
+program
+    .command('deploy')
+    .description('部署项目')
+    .option('-n, --nickname [nickname]', '部署人姓名', 'pawel')
+    .option('-p, --project <projectName>', '要部署的项目名称')
+    .option('-e, --env <env>', '要部署的环境')
+    .option('-b, --branch <branch>', '要部署的分支名称')
+    .action(option => {
+        var prompts = []
+        prompts.push({
+            type: 'list',
+            name: 'project',
+            message: '请选择部署的项目',
+            choices: function () {
+                var done = this.async();
+                done(null, [
+                    { name: '项目1', value: 'project1' },
+                    { name: '项目2', value: 'project2' },
+                    { name: '项目3', value: 'project3' }
+                ])
+            }
+        });
+        child_process.exec('git branch', (err, stdout, stderr) => {
+            console.log(stderr)
+            // inquirer.prompt(prompts).then(function (answers) {
+            //     console.log(answers)
+            // })
+        })
+    })
+ 
+//  program.version('0.0.1');
+program.parse(process.argv)
+//  console.log('未使用到的参数', program.args)
+ 
+//  console.log(program.opts())
+//  console.log('names:', program.names)
+//  console.log('age:', program.age)
+//  console.log('favorite-fruit:', program.favoriteFruit)
